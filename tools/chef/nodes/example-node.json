@@ -1,0 +1,47 @@
+{
+  "name": "{{project.name}}.{{server.stage.name}}.{{sessiondigital|inviqa}}.com",
+  "chef_environment": "_default",
+  "run_list": [
+    "recipe[git]"
+  ],
+  "normal": {
+    "tags": [],
+    "yum": {
+      "ius_release": "1.0-10"
+    },
+    "magento": {
+      "dir": "/var/www/{{project.name}}.{{server.stage.name}}.{{sessiondigital|inviqa}}.com/current/public",
+      "apache": {
+        "servername": "{{project.name}}.{{server.stage.name}}.{{sessiondigital|inviqa}}.com",
+        "serveralias": [
+          "{{project.name}}.css.{{server.stage.name}}.{{sessiondigital|inviqa}}.com",
+          "{{project.name}}.img.{{server.stage.name}}.{{sessiondigital|inviqa}}.com",
+          "{{project.name}}.js.{{server.stage.name}}.{{sessiondigital|inviqa}}.com"
+        ],
+        "path": "/current/public"
+      },
+      "admin": {
+        "user": "admin",
+        "password": "123123pass"
+      },
+      "db": {
+        "database": "magento_db",
+        "username": "magentodbu",
+        "password": "*sZcJ>si7a"
+      },
+      "app": {
+        "multi_session_save": "memcache",
+        "backend_cache": "memcached",
+        "backend_servers": [{
+          "host": "127.0.0.1",
+          "port": "11211",
+          "persistent": "1",
+          "weight": "1",
+          "timeout": "10",
+          "retry_interval": "10",
+          "status": "1"
+        }]
+      }
+    }
+  }
+}

@@ -1,0 +1,139 @@
+SITE
+  remote: http://community.opscode.com/api/v1
+  specs:
+    apache2 (1.2.0)
+    apt (1.4.8)
+    aws (0.100.2)
+    bluepill (1.1.0)
+    build-essential (1.1.2)
+    capistrano (0.7.0)
+    database (1.3.4)
+      aws (>= 0.0.0)
+      mysql (>= 1.3.0)
+      postgresql (>= 1.0.0)
+      xfs (>= 0.0.0)
+    dmg (1.0.0)
+    git (1.0.2)
+      build-essential (>= 0.0.0)
+      dmg (>= 0.0.0)
+      runit (>= 0.0.0)
+      yum (>= 0.0.0)
+    java (1.6.0)
+    ohai (1.0.2)
+    openssl (1.0.0)
+    php (1.1.0)
+      build-essential (>= 0.0.0)
+      mysql (>= 0.0.0)
+      xml (>= 0.0.0)
+    postgresql (1.0.0)
+      openssl (>= 0.0.0)
+    runit (0.15.0)
+    solr (0.8.1)
+      capistrano (>= 0)
+      java (>= 0)
+      runit (>= 0)
+    xfs (1.0.0)
+    xml (1.0.4)
+    yum (1.0.0)
+
+GIT
+  remote: git://github.com/CXInc/chef-redis.git
+  ref: master
+  sha: 36a94382d77da8dae282b3be46feddf40d2ac568
+  specs:
+    redis (1.0.2)
+      build-essential (>= 0.0.0)
+      runit (>= 0.0.0)
+      yum (>= 0.0.0)
+
+GIT
+  remote: git://github.com/needle-cookbooks/chef-opscode-nginx.git
+  ref: master
+  sha: e25b6cae05defc9923f8f59f562549017f8cb716
+  specs:
+    nginx (1.0.1)
+      bluepill (>= 0.0.0)
+      build-essential (>= 0.0.0)
+      ohai (~> 1.0.2)
+      runit (>= 0.0.0)
+      yum (>= 0.0.0)
+
+GIT
+  remote: git://github.com/opscode-cookbooks/memcached.git
+  ref: master
+  sha: 4761242518e84e86d0970d97ef92d608da49f6cf
+  specs:
+    memcached (1.0.4)
+      runit (>= 0.0.0)
+
+GIT
+  remote: git://github.com/opscode-cookbooks/mysql.git
+  ref: master
+  sha: 7d72d69bfebc79da8542167c13e035daf5ff3a89
+  specs:
+    mysql (1.3.0)
+      build-essential (>= 0.0.0)
+      openssl (>= 0.0.0)
+
+GIT
+  remote: git@github.com:inviqa/chef-magento.git
+  ref: master
+  sha: 0832101cf7edaaabac5b8f4b612307a3850536ce
+  specs:
+    chef-magento (0.0.1)
+      apache2 (>= 0.0.0)
+      chef-magento (>= 0.0.0)
+      chef-php-extra (>= 0.0.0)
+      chef-varnish (>= 0.0.0)
+      database (>= 0.0.0)
+      git (>= 0.0.0)
+      memcached (>= 0.0.0)
+      mysql (>= 0.0.0)
+      php (>= 0.0.0)
+      solr (>= 0.0.0)
+
+GIT
+  remote: git@github.com:inviqa/chef-php-extra.git
+  ref: master
+  sha: d2831a8c3fa730918a6357e95332ad751ebc9841
+  specs:
+    chef-php-extra (0.0.2)
+      apt (>= 0.0.0)
+      chef-php-extra (>= 0.0.0)
+      git (>= 0.0.0)
+      php (>= 0.0.0)
+      yum (>= 0.0.0)
+
+GIT
+  remote: git@github.com:inviqa/chef-varnish.git
+  ref: master
+  sha: f86b01adf04abb8412b6d2c7f19de6e9bbd6f81d
+  specs:
+    chef-varnish (0.0.1)
+      apt (>= 0.0.0)
+      yum (>= 0.0.0)
+
+GIT
+  remote: git@github.com:inviqa/chef-xhprof-gui.git
+  ref: master
+  sha: 247dcb5718a831f5b1dbe0bc13354a64b8a2348e
+  specs:
+    chef-xhprof-gui (0.0.1)
+      apache2 (>= 0.0.0)
+      chef-php-extra (>= 0.0.0)
+      chef-xhprof-gui (>= 0.0.0)
+      database (>= 0.0.0)
+      git (>= 0.0.0)
+      mysql (>= 0.0.0)
+      php (>= 0.0.0)
+
+DEPENDENCIES
+  chef-magento (>= 0)
+  chef-php-extra (>= 0)
+  chef-varnish (>= 0)
+  chef-xhprof-gui (>= 0)
+  memcached (>= 0)
+  mysql (>= 0)
+  nginx (>= 0)
+  redis (>= 0)
+

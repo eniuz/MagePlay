@@ -1,0 +1,204 @@
+require 'socket'
+
+server_name = "mageplay.development.local"
+vm_ip = "33.33.33.23"
+
+begin
+  res = Socket::getaddrinfo(server_name, nil, Socket::AF_INET)
+rescue SocketError => e
+  # s doesn't resolve to anything at all
+  print "error: [#{server_name}] does not resolve to [#{vm_ip}] (edit /etc/hosts)\n"
+  exit
+end
+if !(Socket::getaddrinfo(server_name, nil, Socket::AF_INET).map { |ip| ip[3] }).any? { |ip| ip == vm_ip } then
+  # s resolves to "wrong" IP
+  print "error: [#{server_name}] does not resolve to [#{vm_ip}] (edit /etc/hosts)\n"
+  exit
+end
+
+Vagrant::Config.run do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+
+  # Tested Ubuntu 12.04
+  # config.vm.box = "ubuntu-12.04-server-amd64"
+  # config.vm.box_url = "http://ib-vagrant-vms.s3.amazonaws.com/ubuntu-12.04-server-amd64.box"
+
+  # Tested CentOS 6.3
+  config.vm.box = "CentOS-6.3-x86_64"
+  config.vm.box_url = "http://ib-vagrant-vms.s3.amazonaws.com/CentOS-6.3-x86_64.box"
+
+  # Boot with a GUI so you can see the screen. (Default is headless)
+  # config.vm.boot_mode = :gui
+
+  # Assign this VM to a host-only network IP, allowing you to access it
+  # via the IP. Host-only networks can talk to the host machine as well as
+  # any other machines on the same network, but cannot be accessed (through this
+  # network interface) by any external networks.
+  config.vm.network :hostonly, vm_ip
+
+  # Assign this VM to a bridged network, allowing you to connect directly to a
+  # network using the host's network device. This makes the VM appear as another
+  # physical device on your network.
+  # config.vm.network :bridged
+
+  # Forward a port from the guest to the host, which allows for outside
+  # computers to access the VM, whereas host only networking does not.
+  # config.vm.forward_port 80, 8080
+
+  # Share an additional folder to the guest VM. The first argument is
+  # an identifier, the second is the path on the guest to mount the
+  # folder, and the third is the path on the host to the actual folder.
+  # config.vm.share_folder "v-data", "/vagrant_data", "../data"
+
+  # The following configuration supports shared folders with host
+  # aware configuration of NFS for performance benefits on unix based hosts
+  require 'ffi'
+  config.vm.share_folder(
+    "project",
+    "/mnt/mageplay",
+    "../../",
+    :nfs => (FFI::Platform::IS_WINDOWS ? false: true)
+  )
+
+  # Enable provisioning with chef solo, specifying a cookbooks path, roles
+  # path, and data_bags path (all relative to this Vagrantfile), and adding 
+  # some recipes and/or roles.
+  #
+  config.vm.provision :chef_solo do |chef|
+
+    # logging
+    chef.log_level = :debug
+
+    chef.cookbooks_path = ["../chef/cookbooks", "../chef/site-cookbooks"]
+    chef.roles_path = ["../chef/roles", "../chef/site-roles"]
+    # chef.data_bags_path = "../my-recipes/data_bags"
+
+    chef.add_recipe "chef-php-extra"
+    #chef.add_recipe "chef-php-extra::predis"
+
+    # Development tools
+    chef.add_recipe "chef-php-extra::development"
+    chef.add_recipe "chef-xhprof-gui"
+
+    # Magento Module
+    # chef.add_recipe "chef-magento::mage-test"
+    # chef.add_recipe "chef-magento::Cm_Cache_Backend_Redis"
+    # chef.add_recipe "chef-magento::Cm_RedisSession"
+
+    # Environment configuration
+    # chef.add_role "apache-webhead"
+    # chef.add_role "mysql-master"
+    # chef.add_role "memcached-store"
+    # chef.add_recipe "redis::server"
+    # chef.add_recipe "chef-magento::mysql"
+    # chef.add_recipe "chef-magento::solr"
+    # chef.add_role "magento-application"
+    # chef.add_role "magento-webhead"
+    # chef.add_role "magento-varnish"
+
+    # You may also specify custom JSON attributes:
+    chef.json = {
+      'php' => {
+        'apc_shm_size' => '32',
+        'display_errors' => "On",
+        'html_errors' => "On",
+        'upload_max_filesize' => '20M',
+        'apc_stat' => '1'
+      },
+      'yum' => {
+         'ius_release' => '1.0-10'
+      },
+      'mysql' => {
+        'server_root_password' => "root"
+      },
+      'xhprof' => {
+        'hostname' => 'xhprof.mageplay.development.local',
+        'db' => {
+          'password' => 'xhpr0fp@ss'
+        },
+        'control_ips' => false
+      },
+      'apache' => {
+        'prefork' => {
+          'startservers' => '10',
+          'minspareservers' => '10'
+        },
+        'worker' => {
+          'startservers' => '10',
+          'minspareservers' => '10'
+        }
+      },
+      'magento' => {
+        'dir' => "/mnt/mageplay/public",
+        'apache' => {
+          'developer_mode' => "true",
+          'servername' => "mageplay.development.local",
+          'server_alias' => [
+            "mageplay.css.development.local",
+            "mageplay.imgs.development.local",
+            "mageplay.js.development.local"
+          ],
+          'docroot' => "/mnt/mageplay/public",
+          'path' => "/",
+          'additional_config_path' => "/mnt/mageplay/config.d"
+        },
+        'php' => {
+          'memory_limit' => "1G",
+          'max_execution_time' => "18000",
+          'display_errors' => "On",
+          'html_errors' => "On",
+          'upload_max_filesize' => '50M'
+        },
+        'admin' => {
+          'user' => 'admin',
+          'password' => '123123pass'
+        },
+#        'app' => {
+#          'multi_session_save' => "redis",
+#          'backend_cache' => "Cm_Cache_Backend_Redis",
+#          'backend_servers' => [
+#            {
+#              "host" => "127.0.0.1",
+#              "port" => "11211",
+#              "persistent" => "1",
+#              "weight" => "1",
+#              "timeout" => "10",
+#              "retry_interval" => "10",
+#              "status" => "1"
+#            }
+#          ]
+#        },
+        'db' => {
+          'password' => "magentodbpass"
+        }
+      }
+    }
+  end
+
+  # Enable provisioning with chef server, specifying the chef server URL,
+  # and the path to the validation key (relative to this Vagrantfile).
+  #
+  # The Opscode Platform uses HTTPS. Substitute your organization for
+  # ORGNAME in the URL and validation key.
+  #
+  # If you have your own Chef Server, use the appropriate URL, which may be
+  # HTTP instead of HTTPS depending on your configuration. Also change the
+  # validation key to validation.pem.
+  #
+  # config.vm.provision :chef_client do |chef|
+  #   chef.chef_server_url = "https://api.opscode.com/organizations/ORGNAME"
+  #   chef.validation_key_path = "ORGNAME-validator.pem"
+  # end
+  #
+  # If you're using the Opscode platform, your validator client is
+  # ORGNAME-validator, replacing ORGNAME with your organization name.
+  #
+  # IF you have your own Chef Server, the default validation client name is
+  # chef-validator, unless you changed the configuration.
+  #
+  #   chef.validation_client_name = "ORGNAME-validator"
+end

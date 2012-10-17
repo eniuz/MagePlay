@@ -1,0 +1,26 @@
+site 'http://community.opscode.com/api/v1'
+
+# Base PHP Setup
+cookbook 'chef-php-extra', :git => 'git@github.com:inviqa/chef-php-extra.git'
+
+# Development Profiling Tools
+cookbook 'chef-xhprof-gui', :git => 'git@github.com:inviqa/chef-xhprof-gui.git'
+
+# Other Technology
+cookbook 'chef-varnish', :git => 'git@github.com:inviqa/chef-varnish.git'
+cookbook 'redis', :git => 'git://github.com/CXInc/chef-redis.git'
+cookbook 'memcached', :git => 'git://github.com/opscode-cookbooks/memcached.git'
+cookbook 'nginx', :git => 'git://github.com/needle-cookbooks/chef-opscode-nginx.git'
+cookbook 'mysql', :git => 'git://github.com/opscode-cookbooks/mysql.git'
+
+# Magento
+cookbook 'chef-magento', :git => 'git@github.com:inviqa/chef-magento.git'
+
+# cookbook 'apache2', '>= 1.0.0'
+
+# cookbook 'rvm',
+#   :git => 'https://github.com/fnichol/chef-rvm'
+
+# cookbook 'postgresql',
+#   :git => 'https://github.com/findsyou/cookbooks',
+#   :ref => 'postgresql-improvements'
