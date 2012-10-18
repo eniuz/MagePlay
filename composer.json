@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.3"
     },
     "require-dev": {
         "phpspec/php-diff": "*@dev",
@@ -9,6 +9,7 @@
         "behat/mink": "*",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
+        "fabpot/goutte": "*@dev",
         "phpunit/phpunit": "*"
     },
     "config": {
