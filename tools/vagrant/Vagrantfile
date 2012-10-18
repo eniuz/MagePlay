@@ -91,14 +91,15 @@ Vagrant::Config.run do |config|
 
     # Environment configuration
     # chef.add_role "apache-webhead"
-    # chef.add_role "mysql-master"
+    chef.add_role "mysql-master"
     # chef.add_role "memcached-store"
     # chef.add_recipe "redis::server"
-    # chef.add_recipe "chef-magento::mysql"
+    chef.add_recipe "chef-magento::mysql"
     # chef.add_recipe "chef-magento::solr"
-    # chef.add_role "magento-application"
-    # chef.add_role "magento-webhead"
+    chef.add_role "magento-application"
+    chef.add_role "magento-webhead"
     # chef.add_role "magento-varnish"
+    chef.add_recipe "chef-magento::sites_config"
 
     # You may also specify custom JSON attributes:
     chef.json = {
