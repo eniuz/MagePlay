@@ -9,8 +9,34 @@
         "behat/mink": "*",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
+        "jakzal/magento-behat-extension": "*@dev",
         "fabpot/goutte": "*@dev",
         "phpunit/phpunit": "*"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "version": "dev-jakub",
+                "name": "jakzal/magento-behat-extension",
+                "source": {
+                    "url": "git://github.com/jakzal/BehatMage.git",
+                    "type": "git",
+                    "reference": "remotes/origin/develop"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "MageTest": "src/"
+                    }
+                }
+            }
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "": ["public/lib", "public/app"],
+            "Mage": "public/app/code/core"
+        }
     },
     "config": {
         "bin-dir": "bin"

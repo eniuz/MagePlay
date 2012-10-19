@@ -58,7 +58,7 @@ Vagrant::Config.run do |config|
   # aware configuration of NFS for performance benefits on unix based hosts
   require 'ffi'
   config.vm.share_folder(
-    "project",
+    "mageplay",
     "/mnt/mageplay",
     "../../",
     :nfs => (FFI::Platform::IS_WINDOWS ? false: true)
@@ -144,8 +144,8 @@ Vagrant::Config.run do |config|
             "mageplay.js.development.local"
           ],
           'docroot' => "/mnt/mageplay/public",
-          'path' => "/",
-          'additional_config_path' => "/mnt/mageplay/config.d"
+          'path' => "/"
+          # 'additional_config_path' => "/mnt/mageplay/config.d"
         },
         'php' => {
           'memory_limit' => "1G",
